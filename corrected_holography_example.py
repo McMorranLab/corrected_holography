@@ -15,10 +15,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 """
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Required external dependencies to run notebook. corrected_holography.py is the corrected holography definitions python script containing all the special functions used below and is included in the same github repository.
@@ -30,7 +30,7 @@ import matplotlib.pyplot as pyplot
 import corrected_holography as ch
 import os
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Creates dictionary of ranked maps s_j(n) of order=ord, takes about 30 minutes to run on my personal computer. Saves file named "fname.npy" to file path "fpath". If the file "fpath/fname.npy" already exists, it will be loaded instead.
@@ -65,7 +65,7 @@ else:
 ch.print_sns_table(matches_sorted)
 
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Plots the relative values of the ranked contributions C_j of the computed maps for the blazed groove profile
@@ -84,7 +84,7 @@ pyplot.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
 pyplot.xlim([0,50000])
 pyplot.show()
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Finds the true maximum invertable mill depth (max_inv) of the groove profile with the computed maps, as well as for sinusoidal and binary groove profiles.
@@ -107,7 +107,7 @@ print("The maximum invertible depth is {} nm".format(sin_max_inv))
 bin_max_inv = 29
 print("The maximum invertible depth is {} nm".format(bin_max_inv))
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Maps the 1d numerical values of Z_1 that correspond to a linear input of Z, this map is inverted  to interpolate the 2d arrays Z(x,y) and \Theta(x,y) from a desired function Z_1(x,y)\Theta_1(x,y). This is done for blazed and sinusiodal groove profiles.
@@ -121,7 +121,7 @@ sin_x_curve = numpy.ogrid[1e-9:sin_max_inv:1000j]
 sin_response = ch.curve_sinusoidal(sin_x_curve,eta)
 sin_Z_curve, sin_A_curve = numpy.abs(sin_response), numpy.unwrap(numpy.angle(sin_response))
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Inverted curves of Z_1 and \Theta_1 as a functions of Z for blazed and sinusoidal groove profiles
@@ -151,7 +151,7 @@ ax2.set_title('Sinusoidal grooves')
 pyplot.subplots_adjust(wspace=0.35)
 pyplot.show()
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Function desired to reconstruct with hologram, here is an LG_3^5 example, the corrected hologram for blazed, sinusoidal, and binary groove profiles
@@ -189,7 +189,7 @@ sin_Psi = ch.fft2(sin_psi)
 bin_psi = numpy.exp(1.0j*sin_grat*eta*bin_max_inv)
 bin_Psi = ch.fft2(bin_psi)
 
-# %% Code Block ##################################################################
+# %% Code Cell ##################################################################
 
 """
 Complex intenisty image of simulated LG_3^5 mode, corrected holograms, and the firsd diffraction order of in the back focal plane of the hologram for blazed, sinusoidal, and binary groove profiles.
