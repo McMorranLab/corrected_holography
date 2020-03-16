@@ -16,12 +16,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+Change the file path name in line 63 before running.
 """
 
 # %% Code Cell ##################################################################
 
 """
-Required external dependencies to run notebook. corrected_holography.py is the corrected holography definitions python script containing all the special functions used below and is included in the same github repository.
+Required external dependencies to run notebook. corrected_holography.py is the corrected holography definitions
+python script containing all the special functions used below and is included in the same github repository.
 """
 %load_ext autoreload
 %autoreload
@@ -33,7 +36,8 @@ import os
 # %% Code Cell ##################################################################
 
 """
-Creates dictionary of ranked maps s_j(n) of order=ord, takes about 30 minutes to run on my personal computer. Saves file named "fname.npy" to file path "fpath". If the file "fpath/fname.npy" already exists, it will be loaded instead.
+Creates dictionary of ranked maps s_j(n) of order=ord for a blazed grating. Takes about 30 minutes to run on my personal computer.
+Saves file named "fname.npy" to file path "fpath". If the file "fpath/fname.npy" already exists, it will be loaded instead.
 
 Returned dictionary format:
 matches_sorted  = {
@@ -47,13 +51,15 @@ matches_sorted  = {
                   }
 """
 
-energy = 200                 # electron energy
+energy = 200                 # electron energy in keV
 eta = 0.008j - numpy.pi / 29 # material parameter of Si3N4 for 200 keV electrons (attenuation and phase shift nm^-1)
-h = 60                       # the search depth (this should be around the maximum invertible depth)
+h = 60                       # the search depth in nm (this should be around the maximum invertible depth
+                             # (depth of maximum diffraction efficiency))
 p = 5                        # maximum value of |s(n)| in brute force search
 q = 6                        # maximum value of n for non-zero s(n) in brute force search
-ord = 1                      # order of maps desired
+ord = 1                      # order of maps desired i.e. diffraction order in which desired function will appear
 
+# Change the path name before running
 fpath = '/Volumes/GoogleDrive/My Drive/Johnson_Research/cwj_projects/cwj_CorrectedHolography/cwj_ch_code/matches_sorted'
 fname = 'matches_E({})eV_h({})_p({})_q({})'.format(energy,h,p,q)
 
@@ -87,7 +93,8 @@ pyplot.show()
 # %% Code Cell ##################################################################
 
 """
-Finds the true maximum invertable mill depth (max_inv) of the groove profile with the computed maps, as well as for sinusoidal and binary groove profiles.
+Finds the true maximum invertable mill depth (max_inv) (depth of maximum diffraction efficiency) of the groove
+profile with the computed maps, as well as for sinusoidal and binary groove profiles.
 """
 
 bla_x_curve = numpy.ogrid[58:62:100j]    # the peak should be within these values
@@ -110,7 +117,9 @@ print("The maximum invertible depth is {} nm".format(bin_max_inv))
 # %% Code Cell ##################################################################
 
 """
-Maps the 1d numerical values of Z_1 that correspond to a linear input of Z, this map is inverted  to interpolate the 2d arrays Z(x,y) and \Theta(x,y) from a desired function Z_1(x,y)\Theta_1(x,y). This is done for blazed and sinusiodal groove profiles.
+Maps the 1d numerical values of Z_1 that correspond to a linear input of Z, this map is inverted  to interpolate
+the 2d arrays Z(x,y) and \Theta(x,y) from a desired function Z_1(x,y)\Theta_1(x,y). This is done for blazed and
+sinusiodal groove profiles.
 """
 
 bla_x_curve = numpy.ogrid[1e-9:bla_max_inv:1000j]
@@ -154,25 +163,27 @@ pyplot.show()
 # %% Code Cell ##################################################################
 
 """
-Function desired to reconstruct with hologram, here is an LG_3^5 example, the corrected hologram for blazed, sinusoidal, and binary groove profiles
+Function desired to reconstruct with hologram, here is an LG_3^5 example and the corrected hologram for blazed,
+sinusoidal, and binary groove profiles
 """
 
-num = 512                                           # array pixel dimension
+num = 512                                             # array pixel dimension
 size = 30.                                            # array width in um
 grid = numpy.ogrid[size/2:-size/2:num*1j, -size/2:size/2:num*1j]
 y, x = numpy.broadcast_arrays(*grid)                  # y,x linear meshgrids
 m1 = 5                                                # azimuthal index
 p1 = 3                                                # radial index
-w0 = 3.25                                              # gaussian beam waist
-phsf = numpy.exp(-1.0j*numpy.pi/2)                    # relative phase
-lg_beam = ch.LG(x, y, m1, p1, w0)
+w0 = 3.25                                             # gaussian beam waist in um
+lg_beam = ch.LG(x, y, m1, p1, w0)                     # complex LG_3^5 wavefunction
 lg_beam /= numpy.max(numpy.abs(lg_beam))              # max amp. normalized complex wavefunction
 pitch = w0*0.4/1.5 # grating pitch
 
+# calculate grating
 bla_grating = ch.correct_grating_arbitrary(lg_beam, bla_max_inv, x, bla_Z_curve, bla_A_curve, bla_x_curve, ch.cbla, 199, pitch)
 sin_grating = ch.correct_grating_sinusoidal(lg_beam, sin_max_inv, x, sin_Z_curve, sin_A_curve, sin_x_curve, 199, pitch)
 bin_grating = ch.correct_grating_binary(lg_beam,size,199,pitch,sc=1.00)
 
+# pad grating
 px = 2**13
 px2 = 2**12
 bla_grat = numpy.zeros((px,px))
@@ -182,6 +193,7 @@ sin_grat[px2-num//2:px2+num//2,px2-num//2:px2+num//2] = sin_grating
 bin_grat = numpy.zeros((px,px))
 bin_grat[px2-num//2:px2+num//2,px2-num//2:px2+num//2] = bin_grating
 
+# calculate back focal plane of each grating
 bla_psi = numpy.exp(1.0j*bla_grat*eta*bla_max_inv)
 bla_Psi = ch.fft2(bla_psi)
 sin_psi = numpy.exp(1.0j*sin_grat*eta*sin_max_inv)
@@ -192,12 +204,13 @@ bin_Psi = ch.fft2(bin_psi)
 # %% Code Cell ##################################################################
 
 """
-Complex intenisty image of simulated LG_3^5 mode, corrected holograms, and the firsd diffraction order of in the back focal plane of the hologram for blazed, sinusoidal, and binary groove profiles.
+Complex intensity image of simulated LG_3^5 mode, corrected holograms, and the first diffraction order in the back focal
+plane of the hologram for blazed, sinusoidal, and binary groove profiles.
 """
 
-xsh = -555
-xwid = 200
-ywid = 200
+xsh = -555              # pixel location of first diffraction order in back focal plane
+xwid = 200              # 1/2 width of window in image of back focal plane
+ywid = 200              # 1/2 height of window in image of back focal plane
 
 fig,(ax1,ax2,ax3) = pyplot.subplots(1,3,dpi=300,figsize=(9,3))
 im1 = ax1.imshow(ch.image(lg_beam,norm=1),cmap=ch.phs_cmap())
