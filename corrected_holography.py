@@ -334,7 +334,7 @@ def correct_grating_arbitrary(beam, height, X, Z_curve, A_curve, x_curve, coeffi
                         numpy.cos(n * (2 * numpy.pi / pitch * X - arg) + numpy.angle(cn)))
     return run * Z_array
 
-def correct_grating_sinusoidal(beam, height, X, Z_curve, A_curve, x_curve, num, pitch):
+def correct_grating_sinusoidal(beam, height, X, Z_curve, A_curve, x_curve, pitch):
     peak = x_curve[-1]
     c = x_curve[-1] / height
     Z_curve /= Z_curve[-1]

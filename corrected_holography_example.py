@@ -93,7 +93,7 @@ pyplot.show()
 # %% Code Cell ##################################################################
 
 """
-Finds the true maximum invertable mill depth (max_inv) (depth of maximum diffraction efficiency) of the groove
+Finds the true maximum invertable mill depth in nm (max_inv) (depth of maximum diffraction efficiency) of the groove
 profile with the computed maps, as well as for sinusoidal and binary groove profiles.
 """
 
@@ -180,7 +180,7 @@ pitch = w0*0.4/1.5 # grating pitch
 
 # calculate grating
 bla_grating = ch.correct_grating_arbitrary(lg_beam, bla_max_inv, x, bla_Z_curve, bla_A_curve, bla_x_curve, ch.cbla, 199, pitch)
-sin_grating = ch.correct_grating_sinusoidal(lg_beam, sin_max_inv, x, sin_Z_curve, sin_A_curve, sin_x_curve, 199, pitch)
+sin_grating = ch.correct_grating_sinusoidal(lg_beam, sin_max_inv, x, sin_Z_curve, sin_A_curve, sin_x_curve, pitch)
 bin_grating = ch.correct_grating_binary(lg_beam,size,199,pitch,sc=1.00)
 
 # pad grating
@@ -198,7 +198,7 @@ bla_psi = numpy.exp(1.0j*bla_grat*eta*bla_max_inv)
 bla_Psi = ch.fft2(bla_psi)
 sin_psi = numpy.exp(1.0j*sin_grat*eta*sin_max_inv)
 sin_Psi = ch.fft2(sin_psi)
-bin_psi = numpy.exp(1.0j*sin_grat*eta*bin_max_inv)
+bin_psi = numpy.exp(1.0j*bin_grat*eta*bin_max_inv)
 bin_Psi = ch.fft2(bin_psi)
 
 # %% Code Cell ##################################################################
