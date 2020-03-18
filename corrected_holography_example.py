@@ -16,8 +16,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
-
-Change the file path name in line 63 before running.
 """
 
 # %% Code Cell ##################################################################
@@ -38,6 +36,7 @@ import os
 """
 Creates dictionary of ranked maps s_j(n) of order=ord for a blazed grating. Takes about 30 minutes to run on my personal computer.
 Saves file named "fname.npy" to file path "fpath". If the file "fpath/fname.npy" already exists, it will be loaded instead.
+To run a quicker test for visualization, change "limit_search" to True.
 
 Returned dictionary format:
 matches_sorted  = {
@@ -58,15 +57,16 @@ h = 60                       # the search depth in nm (this should be around the
 p = 5                        # maximum value of |s(n)| in brute force search
 q = 6                        # maximum value of n for non-zero s(n) in brute force search
 ord = 1                      # order of maps desired i.e. diffraction order in which desired function will appear
+limit_search = False         # limits the search to 1 non-zero value in the maps s(n). Use only for quick visualization
 
-# Change the path name before running
-fpath = '/Volumes/GoogleDrive/My Drive/Johnson_Research/cwj_projects/cwj_CorrectedHolography/cwj_ch_code/matches_sorted'
-fname = 'matches_E({})eV_h({})_p({})_q({})'.format(energy,h,p,q)
+# Choose a path name before running
+fpath = 'matches_sorted'
+fname = 'matches_E({})eV_h({})_p({})_q({})_limit({})'.format(energy,h,p,q,limit_search)
 
 if os.path.exists('{}/{}.npy'.format(fpath,fname)):
     matches_sorted = numpy.load('{}/{}.npy'.format(fpath,fname),encoding='bytes',allow_pickle=True).item()
 else:
-    matches_sorted = ch.first_order_contributions(ch.cbla, eta, h, p, q, ord, fpath, fname)
+    matches_sorted = ch.first_order_contributions(ch.cbla, eta, h, p, q, ord, fpath, fname, limit_search)
 
 ch.print_sns_table(matches_sorted)
 
@@ -77,11 +77,11 @@ ch.print_sns_table(matches_sorted)
 Plots the relative values of the ranked contributions C_j of the computed maps for the blazed groove profile
 """
 
-vals = [numpy.log10(matches_sorted[i]['val']/matches_sorted[0]['val']) for i in range(50000)]
+vals = [numpy.log10(matches_sorted[i]['val']/matches_sorted[0]['val']) for i in range(len(matches_sorted))]
 
 pyplot.figure(figsize=(5,5),dpi=300)
 pyplot.plot(vals,label=r'$h_0$ = {} nm'.format(h),linewidth=1)
-pyplot.title("Contributing values for the first 50000 terms")
+pyplot.title("Contributing values for the first {} terms".format(len(matches_sorted)))
 pyplot.ylabel(r"$\log_{10}(C_j/C_0)$")
 pyplot.xlabel(r"Rank $j$")
 pyplot.grid(which='both',alpha=0.2)
@@ -102,17 +102,17 @@ bla_response = ch.curve_arbitrary(bla_x_curve,ch.cbla,eta,matches_sorted)
 bla_Z_curve, A_curve = numpy.abs(bla_response), numpy.unwrap(numpy.angle(bla_response))
 bla_max_inv = numpy.where(numpy.diff(bla_Z_curve) < 0)[0][0]
 bla_max_inv = bla_x_curve[bla_max_inv]
-print("The maximum invertible depth is {} nm".format(bla_max_inv))
+print("The maximum invertible depth (computed profile) is {:.2f} nm".format(bla_max_inv))
 
 sin_x_curve = numpy.ogrid[33:39:100j]    # the peak should be within these values
 sin_response = ch.curve_sinusoidal(sin_x_curve,eta)
 sin_Z_curve, sin_A_curve = numpy.abs(sin_response), numpy.unwrap(numpy.angle(sin_response))
 sin_max_inv = numpy.where(numpy.diff(sin_Z_curve) < 0)[0][0]
 sin_max_inv = sin_x_curve[sin_max_inv]
-print("The maximum invertible depth is {} nm".format(sin_max_inv))
+print("The maximum invertible depth (sinusoidal profile) is {:.2f} nm".format(sin_max_inv))
 
 bin_max_inv = 29
-print("The maximum invertible depth is {} nm".format(bin_max_inv))
+print("The maximum invertible depth (binary profile) is {:.2f} nm".format(bin_max_inv))
 
 # %% Code Cell ##################################################################
 

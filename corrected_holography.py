@@ -25,6 +25,8 @@ import gc
 import itertools
 from matplotlib.colors import LinearSegmentedColormap
 import scipy.special
+import os
+import time
 
 """
 This block of functions are used to extract the maps s_j(n) that are of a specified order ranked and sorted by their contribution j.
@@ -196,50 +198,8 @@ def search(N, level, ext, begin, r=1):
         ret.append(temp)
     return ret
 
-def edited_first_order_contributions(coefficients, eta, height, p, q, ord, fpath, fname):
-    """
-    Generate a large sequence of terms which contribute to the first diffraction order,
-    and also calculate the contribution from each and saves to file
 
-    coefficients: Fourier coefficients for groove profile
-    eta:          material parameter for longitudinal phase shift and attenuation per unit length
-    height:       maximum pattern depth
-    p:            maximum s(n) value for brute force search search
-    q:            maximum n value for brute force
-    fpath:        file path for save file
-    fname:        file name for save file
-    """
-    N = 100                                         # maximum value of n to search to
-    Z = numpy.ogrid[0:height:5.j]                   # a sparse array to evaluate for each term
-    rr = [[i, 0] for i in range(q + 1, N + 1)]      # This is to extend the sequences we get to the max n
-    r = (list(l) + rr for l in itertools.product(*[[[n, m] for m in range(-p, p + 1)] for n in range(1,  q + 1)]))
-
-    pairs = search(N, 2, N, q + 1, 19)
-    # triples = search(int(N / 2), 3, N, q + 1, 7)
-    # quads = search(int(N / 3), 4, N, q + 1, 5)
-    # pentas = search(int(N / 4), 5, N, q + 1, 5)
-    # hexas = search(int(N / 5), 6, N, q + 1, 5)
-    # septas = search(int(N / 6), 7, N, q + 1, 5)
-
-    print("Patterns Initiated, adding {} terms.".format(len(pairs)))
-
-    matches = {i: {'list': list(sequence),
-                   'order': order[0],
-                   'val': val[0]}
-                   for i, sequence in enumerate(itertools.chain(r, pairs))
-                   if order(sequence) == ord and val(list(sequence), Z, eta, coefficients) > 0}
-    print("Found {} contributors to the first diffraction order".format(len(matches)))
-
-    gc.collect()
-
-    sorted = {i: val[1] for i, val in enumerate(heapq.nlargest(50000, matches.items(), key=lambda item: item[1]['val']))}
-
-    numpy.save(fpath+fname+'.npy',sorted)
-
-    return sorted
-
-
-def first_order_contributions(coefficients, eta, height, p, q, ord, fpath, fname):
+def first_order_contributions(coefficients, eta, height, p, q, ord, fpath, fname, limit_search = False):
     """
     Generate a large sequence of terms which contribute to the first diffraction order,
     and also calculate the contribution from each and saves to file
@@ -257,26 +217,49 @@ def first_order_contributions(coefficients, eta, height, p, q, ord, fpath, fname
     rr = [[i, 0] for i in range(q + 1, N + 1)]      # This is to extend the sequences we get to the max n
     r = (list(l) + rr for l in itertools.product(*[[[n, m] for m in range(-p, p + 1)] for n in range(1,  q + 1)]))
 
+    t0 = time.time()
     pairs = search(N, 2, N, q + 1, 19)
-    triples = search(int(N / 2), 3, N, q + 1, 7)
-    quads = search(int(N / 3), 4, N, q + 1, 5)
-    pentas = search(int(N / 4), 5, N, q + 1, 5)
-    hexas = search(int(N / 5), 6, N, q + 1, 5)
-    septas = search(int(N / 6), 7, N, q + 1, 5)
 
-    print("Patterns Initiated, adding {} terms.".format(len(pairs) + len(triples) + len(quads) + len(pentas)
-                                                       + len(hexas) + len(septas)))
+    if not limit_search:
+        print("1/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        triples = search(int(N / 2), 3, N, q + 1, 7)
+        print("2/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        quads = search(int(N / 3), 4, N, q + 1, 5)
+        print("3/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        pentas = search(int(N / 4), 5, N, q + 1, 5)
+        print("4/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        hexas = search(int(N / 5), 6, N, q + 1, 5)
+        print("5/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        septas = search(int(N / 6), 7, N, q + 1, 5)
+        print("6/6 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        print("Patterns Initiated, adding {} terms.".format(len(pairs) + len(triples) + len(quads) + len(pentas)
+                                                           + len(hexas) + len(septas)))
+        matches = {i: {'list': list(sequence),
+                       'order': order[0],
+                       'val': val[0]}
+                       for i, sequence in enumerate(itertools.chain(r, pairs, triples, quads, pentas, hexas, septas))
+                       if order(sequence) == ord and val(list(sequence), Z, eta, coefficients) > 0}
 
-    matches = {i: {'list': list(sequence),
-                   'order': order[0],
-                   'val': val[0]}
-                   for i, sequence in enumerate(itertools.chain(r, pairs, triples, quads, pentas, hexas, septas))
-                   if order(sequence) == ord and val(list(sequence), Z, eta, coefficients) > 0}
+    elif limit_search:
+        print("1/1 search calls completed. {:.4f}s elapsed. ".format(time.time()-t0))
+        print("Patterns Initiated, adding {} terms.".format(len(pairs)))
+
+        matches = {i: {'list': list(sequence),
+                       'order': order[0],
+                       'val': val[0]}
+                       for i, sequence in enumerate(itertools.chain(r, pairs))
+                       if order(sequence) == ord and val(list(sequence), Z, eta, coefficients) > 0}
+
     print("Found {} contributors to the first diffraction order".format(len(matches)))
 
     gc.collect()
 
     sorted = {i: val[1] for i, val in enumerate(heapq.nlargest(50000, matches.items(), key=lambda item: item[1]['val']))}
+
+    if os.path.exists(fpath):
+        pass
+    else:
+        os.mkdir(fpath)
 
     numpy.save('{}/{}.npy'.format(fpath,fname),sorted)
 
