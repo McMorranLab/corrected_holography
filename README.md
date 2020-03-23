@@ -3,6 +3,8 @@ This repository contains python functions for creating arbitrary off-axis correc
 
 C. W. Johnson, J. S. Pierce, R. C. Moraski, A. E. Turner, A. T. Greenberg, W. S. Parker, and B. J. McMorran, “Corrected Off-Axis Holography for Producing Arbitrary Scalar Fields,” Opt. Express, OE (Submitted 2020)
 
+It is managed by the McMorran Lab at the University of Oregon, see licence for use and distribution permissions POC: [Benjamin J. McMorran](mailto:mcmorran@uoregon.edu?subject=[GitHub]%20corrected_holography).
+
 ## Purpose
 
 This repository is a Python implementation of the inversion of Eq. (13) as described in Section 2.3 of the article:
