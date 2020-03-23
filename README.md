@@ -25,7 +25,7 @@ In general, the user will need to specify the following variables in order to ge
 
 |Symbol|Variable name in `ch_template.py`|Description|
 |-------|------|---|
-|$\tilde{\eta}$|`eta`|Specifies the attenuation and phase shift of the material.|
+|![equation](https://latex.codecogs.com/gif.latex?%5Ctilde%5Ceta)|`eta`|Specifies the attenuation and phase shift of the material.|
 |$h$|`h`|The groove depth.|
 |$p$|`p`|Search parameter $\|s(n)\|\leq p$ |
 |$q$|`q`|Search parameter $n\leq q$ |
