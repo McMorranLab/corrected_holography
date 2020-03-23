@@ -9,7 +9,11 @@ This repository is a Python implementation of the inversion described in Section
 
 It contains functions to search for the maps 
 ![equation](https://latex.codecogs.com/gif.latex?s%28n%29%20%5Cin%20E_m) 
-which contribute most to the RHS, and to numerically invert the above equation using those maps to find the function $Z(\mathbf{r})$ corresponding to a desired function $Z_m(\mathbf{r})$.
+which contribute most to the RHS, and to numerically invert the above equation using those maps to find the function 
+![equation](https://latex.codecogs.com/gif.latex?Z%28%5Cmathbf%7Br%7D%29)
+corresponding to a desired function 
+![equation](https://latex.codecogs.com/gif.latex?Z_m%28%5Cmathbf%7Br%7D%29)
+.
 
 ## Usage
 
