@@ -5,8 +5,7 @@ This repository contains python functions for creating arbitrary off-axis correc
 
 This repository is a Python implementation of the inversion described in Section 2.3 of the paper:
 
-$$Z_m(\mathbf{r}) = \left|e^{i\tilde{\eta}\left(d-c_0(\mathbf{r})hZ(\mathbf{r})\right)}\sum_{s \in E_m}\prod_{n=1}^\infty \alpha_n(\mathbf{r})^{s(n)} I_{s(n)} \left(-2i\tilde{\eta}|c_n(\mathbf{r})|hZ(\mathbf{r})\right) \right|/A_m. $$
-![equation](http://latex.codecogs.com/gif.latex?O_t%3D%5Ctext%20%7B%20Onset%20event%20at%20time%20bin%20%7D%20t)
+![equation](http://latex.codecogs.com/gif.latex?Z_m%28%5Cmathbf%7Br%7D%29%20%3D%20%5Cleft%7Ce%5E%7Bi%5Ctilde%7B%5Ceta%7D%5Cleft%28d-c_0%28%5Cmathbf%7Br%7D%29hZ%28%5Cmathbf%7Br%7D%29%5Cright%29%7D%5Csum_%7Bs%20%5Cin%20E_m%7D%5Cprod_%7Bn%3D1%7D%5E%5Cinfty%20%5Calpha_n%28%5Cmathbf%7Br%7D%29%5E%7Bs%28n%29%7D%20I_%7Bs%28n%29%7D%20%5Cleft%28-2i%5Ctilde%7B%5Ceta%7D%7Cc_n%28%5Cmathbf%7Br%7D%29%7ChZ%28%5Cmathbf%7Br%7D%29%5Cright%29%20%5Cright%7C/A_m
 
 It contains functions to search for the maps $s(n) \in E_m$ which contribute most to the RHS, and to numerically invert the above equation using those maps to find the function $Z(\mathbf{r})$ corresponding to a desired function $Z_m(\mathbf{r})$.
 
