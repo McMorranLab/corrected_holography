@@ -33,6 +33,7 @@ In general, the user will need to specify the following variables in order to ge
 
 To use `ch_template.py`, modify the variables at the top of the code, then run via the command line. The output will be a `.npy` file containing the grating values, along with a `.npy` containing the far-field diffraction pattern if `-bfp` is used. 
 
+
 ## Funding
 
 Necessary?
