@@ -1,5 +1,5 @@
 # corrected_holography
-This repository contains python functions for creating arbitrary off-axis corrected hologram patterns. It accompanies **C. W. Johnson, J. S. Pierce, R. C. MORASKI, A. E. Turner, A. T. Greenberg, W. S. Parker, and B. J. McMorran, “Corrected Off-Axis Holography for Producing Arbitrary Scalar Fields,” Opt. Express, OE (Submitted 2020)**
+This repository contains python functions for creating arbitrary off-axis corrected hologram patterns. It accompanies *C. W. Johnson, J. S. Pierce, R. C. Moraski, A. E. Turner, A. T. Greenberg, W. S. Parker, and B. J. McMorran, “Corrected Off-Axis Holography for Producing Arbitrary Scalar Fields,” Opt. Express, OE (Submitted 2020)*
 
 ## Purpose
 
