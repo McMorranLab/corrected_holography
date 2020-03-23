@@ -6,6 +6,7 @@ This repository contains python functions for creating arbitrary off-axis correc
 This repository is a Python implementation of the inversion described in Section 2.3 of the paper:
 
 $$Z_m(\mathbf{r}) = \left|e^{i\tilde{\eta}\left(d-c_0(\mathbf{r})hZ(\mathbf{r})\right)}\sum_{s \in E_m}\prod_{n=1}^\infty \alpha_n(\mathbf{r})^{s(n)} I_{s(n)} \left(-2i\tilde{\eta}|c_n(\mathbf{r})|hZ(\mathbf{r})\right) \right|/A_m. $$
+![equation](http://latex.codecogs.com/gif.latex?O_t%3D%5Ctext%20%7B%20Onset%20event%20at%20time%20bin%20%7D%20t)
 
 It contains functions to search for the maps $s(n) \in E_m$ which contribute most to the RHS, and to numerically invert the above equation using those maps to find the function $Z(\mathbf{r})$ corresponding to a desired function $Z_m(\mathbf{r})$.
 
