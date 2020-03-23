@@ -3,7 +3,7 @@
 ch_template.py is a command-line implementation of corrected off-axis
 hologram pattern generation.
 
-Copyright (C) 2020, Cameron Johnson
+Copyright (C) 2020, Cameron W. Johnson and Jordan S. Pierce
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
