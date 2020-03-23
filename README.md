@@ -5,7 +5,7 @@ C. W. Johnson, J. S. Pierce, R. C. Moraski, A. E. Turner, A. T. Greenberg, W. S.
 
 ## Purpose
 
-This repository is a Python implementation of the inversion described in Section 2.3 of the paper:
+This repository is a Python implementation of the inversion described in Section 2.3 of the article:
 
 ![equation](https://latex.codecogs.com/gif.latex?A_1Z_1%28%5Cmathbf%7Br%7D%29%5CTheta_1%28%5Cmathbf%7Br%7D%29%26%20%3D%20e%5E%7Bi%5Ctilde%7B%5Ceta%7D%28d-c_0%28%5Cmathbf%7Br%7D%29hZ%28%5Cmathbf%7Br%7D%29%29%7D%5CTheta%28%5Cmathbf%7Br%7D%29%5Csum_%7Bs%5Cin%20E_1%7D%5Cprod_%7Bn%3D1%7D%5E%5Cinfty%5Calpha_n%28%5Cmathbf%7Br%7D%29%5E%7Bs%28n%29%7DI_%7Bs%28n%29%7D%5Cbig%28-2i%5Ctilde%7B%5Ceta%7D%7Cc_n%28%5Cmathbf%7Br%7D%29%7ChZ%28%5Cmathbf%7Br%7D%29%5Cbig%29)
 
@@ -36,9 +36,3 @@ In general, the user will need to specify the following variables in order to ge
 To use `ch_template.py`, modify the variables at the top of the code, then run via the command line. The output will be a `.npy` file containing the grating values, along with a `.npy` containing the far-field diffraction pattern if `-bfp` is used. 
 
 
-## Funding
-
-Necessary?
-
-## Acknowledgments
-Same as paper?
