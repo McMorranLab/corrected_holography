@@ -27,7 +27,7 @@ In general, the user will need to specify the following variables in order to ge
 
 |Symbol|Variable name in `ch_template.py`|Description|
 |-------|------|---|
-|![equation](https://latex.codecogs.com/gif.latex?%5Ctilde%5Ceta)|`eta`|Specifies the attenuation and phase shift of the material.|
+|![equation](https://latex.codecogs.com/gif.latex?%5Ctilde%5Ceta)|`eta`|Complex parameter the attenuation and phase shift per unit length of material.|
 |![equation](https://latex.codecogs.com/gif.latex?h)|`h`|The groove depth.|
 |![equation](https://latex.codecogs.com/gif.latex?p)|`p`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?%7Cs%28n%29%7C%5Cleq%20p). |
 |![equation](https://latex.codecogs.com/gif.latex?q)|`q`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?n%5Cleq%20q). |
