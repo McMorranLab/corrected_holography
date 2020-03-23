@@ -24,8 +24,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 Required external dependencies to run notebook. corrected_holography.py is the corrected holography definitions
 python script containing all the special functions used below and is included in the same github repository.
 """
-%load_ext autoreload
-%autoreload
+# %load_ext autoreload
+# %autoreload
 import numpy
 import matplotlib.pyplot as pyplot
 import corrected_holography as ch
