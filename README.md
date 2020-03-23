@@ -21,8 +21,8 @@ In general, the user will need to specify the following variables in order to ge
 |-------|------|---|
 |![equation](https://latex.codecogs.com/gif.latex?%5Ctilde%5Ceta)|`eta`|Specifies the attenuation and phase shift of the material.|
 |![equation](https://latex.codecogs.com/gif.latex?h)|`h`|The groove depth.|
-|![equation](https://latex.codecogs.com/gif.latex?p)|`p`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?%7Cs%28n%29%7C%5Cleq%20p) |
-|![equation](https://latex.codecogs.com/gif.latex?q)|`q`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?n%5Cleq%20q) |
+|![equation](https://latex.codecogs.com/gif.latex?p)|`p`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?%7Cs%28n%29%7C%5Cleq%20p). |
+|![equation](https://latex.codecogs.com/gif.latex?q)|`q`|Search limit parameter ![equation](https://latex.codecogs.com/gif.latex?n%5Cleq%20q). |
 |![equation](https://latex.codecogs.com/gif.latex?m)|`ord`|Diffraction order on which to imprint the desired function.|
 |![equation](https://latex.codecogs.com/gif.latex?Z_m%28%5Cmathbf%7Br%7D%29%5CTheta_m%28%5Cmathbf%7Br%7D%29)|`beam_func`|A python function which defines the desired transverse profile.|
 ||`limit_search`|Boolean to limit the search to 1 non-zero value in ![eqaution](https://latex.codecogs.com/gif.latex?s%28n%29). Use only for visualization. |
