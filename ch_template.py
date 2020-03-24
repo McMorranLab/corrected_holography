@@ -137,7 +137,7 @@ if __name__ == "__main__":
     parser.add_argument('-fpath', type = str, default = 'new_hologram', help = "Path to store the computed grating. ")
     parser.add_argument('-fname', type = str, default = None, help = "File name for the computed grating. ")
     parser.add_argument('-bfp', default = False, action = 'store_true', help = "Whether to calculate the back fourier plane of the computed grating. ")
-    parser.add_argument('-eta', type = float, nargs = 2, default = (numpy.real(eta), numpy.imag(eta)), help = "Phase shift and attenuation parameter (-eta Re[eta] Im[eta]). ")
+    parser.add_argument('-eta', type = float, nargs = 2, default = (numpy.real(eta), numpy.imag(eta)), help = "Phase shift and attenuation parameter per nm (-eta Re[eta] Im[eta]). ")
     parser.add_argument('-h0', type = float, default = h, help = "Maximum groove depth. ")
     parser.add_argument('-p', type = int, default = p, help = "Search parameter. ")
     parser.add_argument('-q', type = int, default = q, help = "Search parameter. ")
