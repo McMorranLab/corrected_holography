@@ -166,7 +166,8 @@ if __name__ == "__main__":
     grating, max_inv = args.func(args.eta[0]+1j*args.eta[1], args.h0, args.p, args.q, args.ord, args.limit_search, args.num, args.size, args.pitch, beam_func, f_comps)
 
     if args.fname is None:
-        args.fname = "groove({})_eta({})_h0({})_p({})_q({})_ord({})_lim({})".format(args.which, args.eta[0]+1j*args.eta[1], args.h0, args.p, args.q, args.ord, args.limit_search)
+        args.fname = "groove({})_eta({:.3f})({:.3f})_h0({})_p({})_q({})_ord({})_lim({})".format(
+            args.which, args.eta[0],args.eta[1], args.h0, args.p, args.q, args.ord, args.limit_search)
     bfpname = args.fname + "_bfp"
 
     if os.path.exists(args.fpath):
