@@ -39,6 +39,44 @@ In general, the user will need to specify the following variables in order to ge
 ||`pitch`|The pitch in ![equation](https://latex.codecogs.com/gif.latex?%5Cmu%20m) of the grating. |
 ||`f_comps`|Required only for `arbitrary`. A python function which defines the Fourier components of the groove profile.|
 
-To use `ch_template.py`, modify the variables at the top of the code, then run via the command line. The output will be a `.npy` file containing the grating values, along with a `.npy` containing the far-field diffraction pattern if `-bfp` is used. 
+### `ch_template.py` usage
 
+`ch_template.py` is a command-line interface for `corrected_holography.py`. It will save a `.npy` file containing the computed hologram, as well as a `.npy` file containing the computed back Fourier plane, if specified.
 
+The user must specify:
+1. The desired beam profile within `ch_template.py`.
+2. The desired groove profile (`sinusoidal`, `binary`, `blazed`, or `arbitrary`) via command line.
+     * If `arbitrary`, the user must specify a groove profile within `ch_template.py`
+
+All other grating parameters can be specified via the command line, and default to those listed in the article.
+
+#### Example
+
+To create a binary hologram that creates a Laguerre-Gauss mode LG<sub>2</sub><sup>3</sup> in the first diffracted order, with pitch 4um, the user would first define the LG mode in `ch_template.py`.
+```
+...
+### Desired beam, desired groove profile
+beam_func = LG23(x,y)
+
+def LG23(x, y): ### user input
+     ...
+...
+```
+then run from the command line
+```
+python ch_template.py -fpath filepath -fname filename -pitch 4 -bfp binary
+```
+`-bfp` tells the program to compute and save the back fourier plane of the computed hologram. Also note that `corrected_holography.py` contains definitions of the Laguerre-Gauss modes for convenience.
+
+The user can also specify an arbitrary groove profile by defining `f_comps`:
+
+```
+### Desired beam, desired groove profile
+beam_func = ### user input - beam profile
+f_comps = ### user input - groove profile's Fourier components
+```
+
+ and would then instead run
+```
+python ch_template.py -fpath filepath -fname filename -pitch 4 -bfp arbitrary
+```

@@ -33,17 +33,20 @@ import argparse
 ##################### Options - see README.md ##################################
 ################################################################################
 
+### Desired beam, desired groove profile
+beam_func = lambda x, y: ch.LG(x, y, 5, 3, 0.1*size)
+f_comps = ch.cbla
+
+### Default parameters
 eta = 0.008j - numpy.pi / 29
 h = 60
 p = 5
 q = 6
 ord = 1
-limit_search = True
+limit_search = False
 num = 512
 size = 30.
-pitch = 0.86
-beam_func = lambda x, y: ch.LG(x, y, 5, 3, 0.1*size)
-f_comps = ch.cbla
+pitch = 3.25
 
 ################################################################################
 ################################################################################
@@ -53,7 +56,7 @@ grid = numpy.ogrid[size/2:-size/2:num*1j, -size/2:size/2:num*1j]
 y, x = numpy.broadcast_arrays(*grid)
 beam = beam_func(x, y)
 
-def arbGrat():
+def arbGrat(eta, h, p, q, ord, limit_search, num, size, pitch, beam_func, f_comps):
     """
     Creates an off-axis hologram for an arbitrary groove profile, defined by its fourier components.
     """
@@ -82,7 +85,7 @@ def arbGrat():
 
     return(grating, max_inv)
 
-def sinGrat(eta, pitch):
+def sinGrat(eta, h, p, q, ord, limit_search, num, size, pitch, beam_func, f_comps):
     """
     Creates a sinusoidal off-axis hologram.
     """
@@ -100,7 +103,7 @@ def sinGrat(eta, pitch):
     sin_grating = ch.correct_grating_sinusoidal(beam, sin_max_inv, x, sin_Z_curve, sin_A_curve, sin_x_curve, pitch)
     return(sin_grating, sin_max_inv)
 
-def binGrat():
+def binGrat(eta, h, p, q, ord, limit_search, num, size, pitch, beam_func, f_comps):
     """
     Creates a binary off-axis hologram.
     """
@@ -109,11 +112,11 @@ def binGrat():
     bin_grating = ch.correct_grating_binary(beam,size,199,pitch,sc=1.00)
     return(bin_grating, bin_max_inv)
 
-def blaGrat():
+def blaGrat(eta, h, p, q, ord, limit_search, num, size, pitch, beam_func, f_comps):
     """
     Creates a blazed off-axis hologram.
     """
-    return(arbGrat())
+    return(arbGrat(eta, h, p, q, ord, limit_search, num, size, pitch, beam_func, f_comps))
 
 def bfp(grating, max_inv):
     """
@@ -129,66 +132,52 @@ def bfp(grating, max_inv):
     Psi = ch.fft2(psi)
     return(Psi)
 
-parser = argparse.ArgumentParser()
-sp = parser.add_subparsers()
-
-parser.add_argument(
-    '-bfp',
-    action = 'store_true',
-    help = "Option to also save the back fourier plane of the grating. "
-)
-parser.add_argument(
-    '-bfppath',
-    type = str,
-    help = "Path to store the back fourier plane. Only used if using -bfp. "
-)
-parser.add_argument(
-    '-bfpname',
-    type = str,
-    help = "Name to store the back fourier plane. Only used if using -bfp. "
-)
-parser.add_argument(
-    '-fpath',
-    type = str,
-    default = 'new_hologram',
-    help = "Path to store the generated hologram. "
-)
-parser.add_argument(
-    '-fname',
-    type = str,
-    help = "Name to store the generated hologram. "
-)
-
-blaP = sp.add_parser("blazed")
-blaP.set_defaults(func=blaGrat, which = 'blazed')
-
-binP = sp.add_parser("binary")
-binP.set_defaults(func=binGrat, which = 'binary')
-
-sinP = sp.add_parser("sinusoidal")
-sinP.set_defaults(func=sinGrat, which = 'sinusoidal')
-
-arbP = sp.add_parser("arbitrary")
-arbP.set_defaults(func=arbGrat, which = 'arbitrary')
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-fpath', type = str, default = 'new_hologram', help = "Path to store the computed grating. ")
+    parser.add_argument('-fname', type = str, default = None, help = "File name for the computed grating. ")
+    parser.add_argument('-bfp', default = False, action = 'store_true', help = "Whether to calculate the back fourier plane of the computed grating. ")
+    parser.add_argument('-eta', type = complex, default = eta, help = "Phase shift and attenuation parameter. ")
+    parser.add_argument('-h0', type = float, default = h, help = "Maximum groove depth. ")
+    parser.add_argument('-p', type = int, default = p, help = "Search parameter. ")
+    parser.add_argument('-q', type = int, default = q, help = "Search parameter. ")
+    parser.add_argument('-ord', type = int, default = ord, help = "Diffraction order of desired profile. ")
+    parser.add_argument('-limit_search', default = limit_search, action = 'store_true', help = "Limits search. Use for testing and visualization only.")
+    parser.add_argument('-num', type = int, default = num, help = "Resolution of the output grating. ")
+    parser.add_argument('-size', type = float, default = size, help = "Diameter of the grating in um. ")
+    parser.add_argument('-pitch', type = float, default = pitch, help = "Pitch of the grating in um. ")
+
+    sp = parser.add_subparsers(title = 'Groove profile. ', dest = 'Groove profile.', help = 'Groove profile. ')
+    sp.required = True
+
+    blaP = sp.add_parser("blazed")
+    blaP.set_defaults(func=blaGrat, which = "blazed")
+
+    binP = sp.add_parser("binary")
+    binP.set_defaults(func=binGrat, which = "binary")
+
+    sinP = sp.add_parser("sinusoidal")
+    sinP.set_defaults(func=sinGrat, which = "sinusoidal")
+
+    arbP = sp.add_parser("arbitrary")
+    arbP.set_defaults(func=arbGrat, which = "arbitrary")
+
     args = parser.parse_args()
-    grating, max_inv = args.func()
-    if args.bfppath is None:
-        args.bfppath = args.fpath
+    grating, max_inv = args.func(args.eta, args.h0, args.p, args.q, args.ord, args.limit_search, args.num, args.size, args.pitch, beam_func, f_comps)
+
     if args.fname is None:
-        args.fname = "type({})_pitch({})_size({})".format(args.which, pitch, size)
-    if args.bfpname is None:
-        args.bfpname = "type({})_pitch({})_size({})_bfp".format(args.which, pitch, size)
+        args.fname = "groove({})_eta({})_h0({})_p({})_q({})_ord({})_lim({})".format(args.which, args.eta, args.h0, args.p, args.q, args.ord, args.limit_search)
+    bfpname = args.fname + "_bfp"
+
     if os.path.exists(args.fpath):
         pass
     else:
         os.mkdir(args.fpath)
-    if os.path.exists(args.bfppath):
-        pass
-    else:
-        os.mkdir(args.bfppath)
+
     numpy.save("{}/{}.npy".format(args.fpath, args.fname), grating)
+    print("Computed grating has been saved to '{}/{}.npy'".format(args.fpath, args.fname))
+
     if args.bfp:
-        back_fourier_plane = bfp(grating, max_inv)
-        numpy.save("{}/{}.npy".format(args.bfppath, args.bfpname), back_fourier_plane)
+        bfplane = bfp(grating, max_inv)
+        numpy.save("{}/{}.npy".format(args.fpath, bfpname), bfplane)
+        print("Back fourier plane has been saved to '{}/{}.npy'".format(args.fpath, bfpname))
