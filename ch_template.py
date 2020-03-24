@@ -137,7 +137,7 @@ if __name__ == "__main__":
     parser.add_argument('-fpath', type = str, default = 'new_hologram', help = "Path to store the computed grating. ")
     parser.add_argument('-fname', type = str, default = None, help = "File name for the computed grating. ")
     parser.add_argument('-bfp', default = False, action = 'store_true', help = "Whether to calculate the back fourier plane of the computed grating. ")
-    parser.add_argument('-eta', type = complex, default = eta, help = "Phase shift and attenuation parameter. ")
+    parser.add_argument('-eta', type = float, nargs = 2, default = (numpy.real(eta), numpy.imag(eta)), help = "Phase shift and attenuation parameter (-eta Re[eta] Im[eta]). ")
     parser.add_argument('-h0', type = float, default = h, help = "Maximum groove depth. ")
     parser.add_argument('-p', type = int, default = p, help = "Search parameter. ")
     parser.add_argument('-q', type = int, default = q, help = "Search parameter. ")
@@ -163,10 +163,10 @@ if __name__ == "__main__":
     arbP.set_defaults(func=arbGrat, which = "arbitrary")
 
     args = parser.parse_args()
-    grating, max_inv = args.func(args.eta, args.h0, args.p, args.q, args.ord, args.limit_search, args.num, args.size, args.pitch, beam_func, f_comps)
+    grating, max_inv = args.func(args.eta[0]+1j*args.eta[1], args.h0, args.p, args.q, args.ord, args.limit_search, args.num, args.size, args.pitch, beam_func, f_comps)
 
     if args.fname is None:
-        args.fname = "groove({})_eta({})_h0({})_p({})_q({})_ord({})_lim({})".format(args.which, args.eta, args.h0, args.p, args.q, args.ord, args.limit_search)
+        args.fname = "groove({})_eta({})_h0({})_p({})_q({})_ord({})_lim({})".format(args.which, args.eta[0]+1j*args.eta[1], args.h0, args.p, args.q, args.ord, args.limit_search)
     bfpname = args.fname + "_bfp"
 
     if os.path.exists(args.fpath):
